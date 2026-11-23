@@ -23,7 +23,7 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'theme-color', content: '#4F46E5' },
+        { name: 'theme-color', content: '#042B4F' },
         { name: 'description', content: 'Sistem Tiket & Work Order IT berbasis Laravel Sanctum & Nuxt PWA' },
       ],
       link: [
@@ -45,8 +45,8 @@ export default defineNuxtConfig({
       name: 'BSHsupport IT Ticketing System',
       short_name: 'BSHsupport',
       description: 'IT Work Order & Support Ticketing System PWA',
-      theme_color: '#4F46E5',
-      background_color: '#F8F9FE',
+      theme_color: '#042B4F',
+      background_color: '#042B4F',
       display: 'standalone',
       orientation: 'portrait',
       scope: '/',

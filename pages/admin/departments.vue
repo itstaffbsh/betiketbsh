@@ -365,7 +365,7 @@ const submitDepartment = async () => {
       icon: 'success',
       title: t('Berhasil', 'Success'),
       text: res.message,
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
       timer: 1800,
     })
   } catch (err: any) {
@@ -373,7 +373,7 @@ const submitDepartment = async () => {
       icon: 'error',
       title: t('Gagal Menyimpan', 'Failed to Save'),
       text: err?.data?.message || t('Periksa kembali input Anda.', 'Please check your input.'),
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
     })
   } finally {
     saving.value = false
@@ -407,7 +407,7 @@ const handleDelete = async (dept: any) => {
       icon: 'success',
       title: t('Terhapus', 'Deleted'),
       text: res.message,
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
       timer: 1600,
     })
   } catch (err: any) {
@@ -415,7 +415,7 @@ const handleDelete = async (dept: any) => {
       icon: 'error',
       title: t('Gagal Menghapus', 'Failed to Delete'),
       text: err?.data?.message || t('Terjadi kesalahan saat menghapus department.', 'An error occurred while deleting department.'),
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
     })
   }
 }

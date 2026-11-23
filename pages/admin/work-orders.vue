@@ -1274,14 +1274,14 @@ const submitQuickPaste = async () => {
         icon: 'warning',
         title: 'Pilih Department Manual',
         text: err.data.message,
-        confirmButtonColor: '#4F46E5',
+        confirmButtonColor: '#042B4F',
       })
     } else {
       await Swal.fire({
         icon: 'error',
         title: 'Gagal Menyimpan Work Order',
         text: err?.data?.message || 'Pastikan format teks memiliki Department, Requested By, Date Requested, Description, dan Location.',
-        confirmButtonColor: '#4F46E5',
+        confirmButtonColor: '#042B4F',
       })
     }
   } finally {
@@ -1324,7 +1324,7 @@ const submitMarkDone = async () => {
       icon: 'success',
       title: 'Tiket Selesai (Done)',
       text: res.message,
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
       timer: 1800,
     })
   } catch (err: any) {
@@ -1332,7 +1332,7 @@ const submitMarkDone = async () => {
       icon: 'error',
       title: 'Gagal Menyimpan',
       text: err?.data?.message || 'Pastikan durasi dan solusi telah diisi.',
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
     })
   } finally {
     savingDone.value = false
@@ -1390,7 +1390,7 @@ const submitEditTicket = async () => {
       icon: 'success',
       title: 'Berhasil Diperbarui',
       text: res.message,
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
       timer: 1800,
     })
   } catch (err: any) {
@@ -1398,7 +1398,7 @@ const submitEditTicket = async () => {
       icon: 'error',
       title: 'Gagal Memperbarui Tiket',
       text: err?.data?.message || 'Periksa kembali input Anda.',
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
     })
   } finally {
     savingEdit.value = false
@@ -1430,7 +1430,7 @@ const handleDelete = async (item: any) => {
       icon: 'success',
       title: 'Terhapus',
       text: res.message,
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
       timer: 1600,
     })
   } catch (err: any) {
@@ -1438,7 +1438,7 @@ const handleDelete = async (item: any) => {
       icon: 'error',
       title: 'Gagal Menghapus',
       text: err?.data?.message || 'Terjadi kesalahan saat menghapus data.',
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
     })
   }
 }
@@ -1498,7 +1498,7 @@ const exportToExcel = async () => {
       icon: 'error',
       title: 'Gagal Mengekspor Excel',
       text: 'Terjadi kesalahan saat mengekspor data ke Excel.',
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
     })
   } finally {
     exporting.value = false

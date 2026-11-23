@@ -119,7 +119,7 @@
             <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div class="flex items-center gap-4">
                 <div class="relative">
-                  <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-600 to-indigo-500 text-white font-extrabold text-xl flex items-center justify-center shadow-md">
+                  <div class="w-16 h-16 rounded-2xl bg-brand-600 text-white font-extrabold text-xl flex items-center justify-center shadow-md">
                     {{ initials }}
                   </div>
                   <span class="w-4 h-4 rounded-full bg-emerald-500 border-2 border-white absolute -bottom-1 -right-1 flex items-center justify-center">
@@ -486,7 +486,7 @@ const submitEditProfile = async () => {
       icon: 'success',
       title: t('Profil Diperbarui', 'Profile Updated'),
       text: res.message,
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
       timer: 1800,
     })
   } catch (err: any) {
@@ -494,7 +494,7 @@ const submitEditProfile = async () => {
       icon: 'error',
       title: t('Gagal Memperbarui Profil', 'Failed to Update Profile'),
       text: err?.data?.message || t('Terjadi kesalahan saat menyimpan profil.', 'An error occurred while saving profile.'),
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
     })
   } finally {
     savingProfile.value = false
@@ -507,7 +507,7 @@ const submitChangePassword = async () => {
       icon: 'warning',
       title: t('Konfirmasi Tidak Cocok', 'Password Mismatch'),
       text: t('Password baru dan konfirmasi password baru harus sama.', 'New password and confirmation must match.'),
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
     })
     return
   }
@@ -523,7 +523,7 @@ const submitChangePassword = async () => {
       icon: 'success',
       title: t('Password Diubah', 'Password Changed'),
       text: res.message,
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
       timer: 1800,
     })
   } catch (err: any) {
@@ -531,7 +531,7 @@ const submitChangePassword = async () => {
       icon: 'error',
       title: t('Gagal Mengubah Password', 'Failed to Change Password'),
       text: err?.data?.message || t('Terjadi kesalahan saat mengubah password.', 'An error occurred while changing password.'),
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
     })
   } finally {
     savingPassword.value = false

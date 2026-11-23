@@ -2229,7 +2229,7 @@ async function errorHandler(error, event) {
 
 const rootDir = "D:/tiketing/frontend";
 
-const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"name":"theme-color","content":"#4F46E5"},{"name":"description","content":"Sistem Tiket & Work Order IT berbasis Laravel Sanctum & Nuxt PWA"}],"link":[{"rel":"icon","type":"image/svg+xml","href":"/icon.svg"},{"rel":"manifest","href":"/manifest.webmanifest"},{"rel":"preconnect","href":"https://fonts.googleapis.com"},{"rel":"preconnect","href":"https://fonts.gstatic.com","crossorigin":""},{"rel":"stylesheet","href":"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"}],"style":[],"script":[],"noscript":[],"title":"BSHsupport — IT Work Order & Ticketing System"};
+const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"name":"theme-color","content":"#042B4F"},{"name":"description","content":"Sistem Tiket & Work Order IT berbasis Laravel Sanctum & Nuxt PWA"}],"link":[{"rel":"icon","type":"image/svg+xml","href":"/icon.svg"},{"rel":"manifest","href":"/manifest.webmanifest"},{"rel":"preconnect","href":"https://fonts.googleapis.com"},{"rel":"preconnect","href":"https://fonts.gstatic.com","crossorigin":""},{"rel":"stylesheet","href":"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"}],"style":[],"script":[],"noscript":[],"title":"BSHsupport — IT Work Order & Ticketing System"};
 
 const appRootTag = "div";
 

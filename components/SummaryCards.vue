@@ -66,7 +66,7 @@
         <span class="text-sm font-semibold text-slate-600">
           {{ t('Jumlah Tiket Hari Ini', "Today's Tickets") }}
         </span>
-        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-600">
+        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 text-brand-600">
           {{ t('Hari Ini', 'Today') }}
         </span>
       </div>
@@ -78,7 +78,7 @@
           {{ t('tiket masuk hari ini', 'incoming today') }}
         </span>
       </div>
-      <Calendar class="w-20 h-20 text-indigo-500/[0.06] absolute -right-2 -bottom-2 transition-transform group-hover:scale-110" />
+      <Calendar class="w-20 h-20 text-brand-500/[0.06] absolute -right-2 -bottom-2 transition-transform group-hover:scale-110" />
     </div>
   </div>
 </template>

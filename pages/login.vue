@@ -97,8 +97,8 @@
       <div class="h-4" />
     </div>
 
-    <!-- RIGHT COLUMN: Purple Rounded-Left Showcase Panel with BSHsupport Dashboard Preview -->
-    <div class="w-full lg:w-[56%] bg-gradient-to-br from-[#4F46E5] via-[#5B50F0] to-[#3730A3] lg:rounded-l-[3rem] relative overflow-hidden flex flex-col justify-between pt-10 sm:pt-14 lg:pt-16 pl-6 sm:pl-12 lg:pl-16 min-h-[420px] lg:min-h-screen">
+    <!-- RIGHT COLUMN: Primary Rounded-Left Showcase Panel with BSHsupport Dashboard Preview -->
+    <div class="w-full lg:w-[56%] bg-[#042B4F] lg:rounded-l-[3rem] relative overflow-hidden flex flex-col justify-between pt-10 sm:pt-14 lg:pt-16 pl-6 sm:pl-12 lg:pl-16 min-h-[420px] lg:min-h-screen">
       <!-- Subtle Decorative Glow -->
       <div class="w-96 h-96 rounded-full bg-white/10 blur-3xl absolute -top-24 -right-24 pointer-events-none" />
 
@@ -109,7 +109,7 @@
           <br />
           {{ t('Dengan Sistem Terintegrasi', 'With Our Smart Tool') }}
         </h2>
-        <p class="text-xs sm:text-sm text-indigo-100/90 mt-3 max-w-md leading-relaxed">
+        <p class="text-xs sm:text-sm text-brand-100/90 mt-3 max-w-md leading-relaxed">
           {{
             t(
               'Kelola tiket dukungan teknis, pemetaan departemen otomatis, dan pemantauan penyelesaian work order dengan mudah.',

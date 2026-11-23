@@ -48,8 +48,8 @@
         <div class="w-full max-w-sm bg-white rounded-3xl shadow-modal border border-slate-100 overflow-hidden p-5 space-y-4">
           <div class="flex items-start justify-between gap-3">
             <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-2xl bg-brand-600 text-white flex items-center justify-center shadow-md shadow-brand-600/25 shrink-0">
-                <Headset class="w-6 h-6" />
+              <div class="w-12 h-12 rounded-2xl bg-brand-600 text-white flex items-center justify-center shadow-md shadow-brand-600/25 shrink-0 p-1.5">
+                <img src="/bsh-logo.png" alt="BaliSuperHost" class="w-full h-auto object-contain" />
               </div>
               <div>
                 <div class="flex items-center gap-1.5">

@@ -79,7 +79,7 @@
               <!-- 1. Nama & Jabatan -->
               <td class="py-4 px-6">
                 <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-600 to-indigo-500 text-white font-extrabold text-xs flex items-center justify-center shrink-0">
+                  <div class="w-9 h-9 rounded-xl bg-brand-600 text-white font-extrabold text-xs flex items-center justify-center shrink-0">
                     {{ getInitials(adm.name) }}
                   </div>
                   <div>
@@ -431,7 +431,7 @@ const submitAdmin = async () => {
       icon: 'success',
       title: t('Berhasil', 'Success'),
       text: res.message,
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
       timer: 1800,
     })
   } catch (err: any) {
@@ -439,7 +439,7 @@ const submitAdmin = async () => {
       icon: 'error',
       title: t('Gagal Menyimpan Admin', 'Failed to Save Admin'),
       text: err?.data?.message || t('Periksa kembali data yang dimasukkan.', 'Please check your input.'),
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
     })
   } finally {
     saving.value = false
@@ -452,7 +452,7 @@ const handleDelete = async (adm: any) => {
       icon: 'warning',
       title: t('Tidak Diizinkan', 'Not Allowed'),
       text: t('Admin yang sedang login tidak dapat menghapus akunnya sendiri.', 'Logged-in admin cannot delete their own account.'),
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
     })
     return
   }
@@ -483,7 +483,7 @@ const handleDelete = async (adm: any) => {
       icon: 'success',
       title: t('Terhapus', 'Deleted'),
       text: res.message,
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
       timer: 1600,
     })
   } catch (err: any) {
@@ -491,7 +491,7 @@ const handleDelete = async (adm: any) => {
       icon: 'error',
       title: t('Gagal Menghapus', 'Failed to Delete'),
       text: err?.data?.message || t('Terjadi kesalahan saat menghapus admin.', 'An error occurred while deleting admin.'),
-      confirmButtonColor: '#4F46E5',
+      confirmButtonColor: '#042B4F',
     })
   }
 }
