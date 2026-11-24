@@ -144,18 +144,18 @@
     <!-- VIEW 1: KANBAN CARD VIEW PER STATUS (Matches Image 1)                   -->
     <!-- ======================================================================= -->
     <div v-if="viewMode === 'card'" class="space-y-3">
-      <div class="flex items-center justify-between text-xs text-slate-500 px-1">
-        <span class="font-semibold">
+      <div class="flex flex-col min-[481px]:flex-row items-start min-[481px]:items-center justify-between gap-1 text-xs text-slate-500 px-1">
+        <div class="font-semibold leading-relaxed">
           {{
             t(
               'Tips: Geser (drag & drop) kartu antar kolom untuk mengubah status tiket.',
               'Tip: Drag & drop cards between columns to change ticket status.'
             )
           }}
-        </span>
-        <span class="font-bold text-slate-700">
+        </div>
+        <div class="font-bold text-slate-700 shrink-0">
           {{ t('Total Ditampilkan', 'Total Shown') }}: {{ tickets.length }} {{ t('tiket', 'tickets') }}
-        </span>
+        </div>
       </div>
 
       <!-- MOBILE <= 480px STATUS TAB BAR (Open | Issued | Done, default: Open) -->
@@ -247,94 +247,109 @@
               v-for="item in col.items"
               :key="item.id"
               :class="[
-                'bg-white rounded-2xl p-4 border border-slate-100 shadow-card hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing select-none group touch-none',
+                'rounded-2xl bg-slate-100/95 min-[481px]:bg-white border border-slate-200/70 min-[481px]:border-slate-100 shadow-card hover:shadow-md transition-shadow select-none group overflow-hidden',
+                'min-[481px]:cursor-grab min-[481px]:active:cursor-grabbing min-[481px]:touch-none',
                 draggingTicket?.id === item.id && pointerDrag.active ? 'opacity-35 border-dashed border-brand-400' : 'opacity-100'
               ]"
               @pointerdown="onCardPointerDown($event, item)"
               @dragstart.prevent
             >
-              <!-- Card Top: Ticket No & Department Badge -->
-              <div class="flex items-start justify-between gap-2.5">
-                <span class="text-sm font-extrabold text-slate-900 tracking-tight">
-                  #{{ item.work_order_no }}
-                </span>
-                <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-brand-50 text-brand-600 text-right leading-tight">
-                  {{ item.department_name || item.department }}
-                </span>
-              </div>
-
-              <!-- Card Main Title (Description) -->
-              <h4 class="text-sm font-extrabold text-slate-900 mt-2.5 line-clamp-2 leading-snug">
-                {{ item.description }}
-              </h4>
-
-              <!-- Card Sub-detail (Location & Date Requested) -->
-              <p class="text-xs text-slate-500 mt-1.5 line-clamp-2 leading-relaxed">
-                {{ item.location }} &bull; {{ item.date_requested_label || item.date_requested }}
-              </p>
-
-              <!-- Status Specific Info Box (Matches Image 1) -->
-              <div
-                v-if="item.status === 'done'"
-                class="mt-3 p-2.5 rounded-xl bg-emerald-50/90 border border-emerald-200/70 flex items-start gap-2 text-emerald-700 text-[11px] font-bold"
-              >
-                <CheckCircle2 class="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                <div class="min-w-0">
-                  <div class="leading-snug">
-                    {{ t('Selesai', 'Completed') }}: {{ item.duration || item.completed_date_label || 'Done' }}
-                  </div>
-                  <div v-if="item.solution" class="text-[10px] font-medium text-emerald-700/80 truncate mt-0.5">
-                    {{ item.solution }}
-                  </div>
-                </div>
-              </div>
-
-              <div
-                v-else-if="item.status === 'wo_issued'"
-                class="mt-3 p-2.5 rounded-xl bg-rose-50/90 border border-rose-200/70 flex items-center gap-2 text-rose-700 text-[11px] font-bold"
-              >
-                <Clock class="w-3.5 h-3.5 text-rose-600 shrink-0" />
-                <span class="leading-snug">
-                  Deadline: {{ item.completion_deadline_label || item.completion_deadline }}
-                </span>
-              </div>
-
-              <div
-                v-else
-                class="mt-3 p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center gap-2 text-slate-600 text-[11px] font-semibold"
-              >
-                <Clock class="w-3.5 h-3.5 text-brand-600 shrink-0" />
-                <span class="leading-snug">
-                  Deadline: {{ item.completion_deadline_label || item.completion_deadline }}
-                </span>
-              </div>
-
-              <!-- Card Footer: Requester Initials + Name on Left, "Buka Detail ->" on Right -->
-              <div class="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                <div class="flex items-center gap-2 min-w-0">
-                  <div class="w-8 h-8 rounded-full bg-brand-50 text-brand-600 font-extrabold text-xs flex items-center justify-center shrink-0">
-                    {{ getInitials(item.requested_by) }}
-                  </div>
-                  <div class="min-w-0">
-                    <span class="text-xs font-extrabold text-slate-800 block truncate">
-                      {{ item.requested_by }}
-                    </span>
-                    <span class="text-[10px] text-slate-400 font-medium block truncate">
-                      {{ item.raw_department || item.department_name }}
-                    </span>
-                  </div>
+              <!-- White Card Body -->
+              <div class="bg-white rounded-2xl p-4 shadow-2xs">
+                <!-- Card Top: Ticket No & Department Badge -->
+                <div class="flex items-start justify-between gap-2.5">
+                  <span class="text-sm font-extrabold text-slate-900 tracking-tight">
+                    #{{ item.work_order_no }}
+                  </span>
+                  <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-brand-50 text-brand-600 text-right leading-tight">
+                    {{ item.department_name || item.department }}
+                  </span>
                 </div>
 
-                <button
-                  type="button"
-                  data-no-drag="true"
-                  class="px-3 py-1.5 rounded-xl bg-brand-50/80 hover:bg-brand-600 text-brand-600 hover:text-white text-xs font-extrabold transition inline-flex items-center gap-1.5 shrink-0 cursor-pointer"
-                  @click.stop="openDetailModal(item)"
+                <!-- Card Main Title (Description) -->
+                <h4 class="text-sm font-extrabold text-slate-900 mt-2.5 line-clamp-2 leading-snug">
+                  {{ item.description }}
+                </h4>
+
+                <!-- Card Sub-detail (Location & Date Requested) -->
+                <p class="text-xs text-slate-500 mt-1.5 line-clamp-2 leading-relaxed">
+                  {{ item.location }} &bull; {{ item.date_requested_label || item.date_requested }}
+                </p>
+
+                <!-- Status Specific Info Box -->
+                <div
+                  v-if="item.status === 'done'"
+                  class="mt-3 p-2.5 rounded-xl bg-emerald-50/90 border border-emerald-200/70 flex items-start gap-2 text-emerald-700 text-[11px] font-bold"
                 >
-                  <span>{{ t('Buka Detail', 'Open Detail') }}</span>
-                  <ArrowRight class="w-3.5 h-3.5" />
-                </button>
+                  <CheckCircle2 class="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                  <div class="min-w-0">
+                    <div class="leading-snug">
+                      {{ t('Selesai', 'Completed') }}: {{ item.duration || item.completed_date_label || 'Done' }}
+                    </div>
+                    <div v-if="item.solution" class="text-[10px] font-medium text-emerald-700/80 truncate mt-0.5">
+                      {{ item.solution }}
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  v-else-if="item.status === 'wo_issued'"
+                  class="mt-3 p-2.5 rounded-xl bg-rose-50/90 border border-rose-200/70 flex items-center gap-2 text-rose-700 text-[11px] font-bold"
+                >
+                  <Clock class="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                  <span class="leading-snug">
+                    Deadline: {{ item.completion_deadline_label || item.completion_deadline }}
+                  </span>
+                </div>
+
+                <div
+                  v-else
+                  class="mt-3 p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center gap-2 text-slate-600 text-[11px] font-semibold"
+                >
+                  <Clock class="w-3.5 h-3.5 text-brand-600 shrink-0" />
+                  <span class="leading-snug">
+                    Deadline: {{ item.completion_deadline_label || item.completion_deadline }}
+                  </span>
+                </div>
+
+                <!-- Card Footer: Requester Initials + Name on Left, "Buka Detail ->" on Right -->
+                <div class="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-brand-50 text-brand-600 font-extrabold text-xs flex items-center justify-center shrink-0">
+                      {{ getInitials(item.requested_by) }}
+                    </div>
+                    <div class="min-w-0">
+                      <span class="text-xs font-extrabold text-slate-800 block truncate">
+                        {{ item.requested_by }}
+                      </span>
+                      <span class="text-[10px] text-slate-400 font-medium block truncate">
+                        {{ item.raw_department || item.department_name }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    data-no-drag="true"
+                    class="px-3 py-1.5 rounded-xl bg-brand-50/80 hover:bg-brand-600 text-brand-600 hover:text-white text-xs font-extrabold transition inline-flex items-center gap-1.5 shrink-0 cursor-pointer"
+                    @click.stop="openDetailModal(item)"
+                  >
+                    <span>{{ t('Buka Detail', 'Open Detail') }}</span>
+                    <ArrowRight class="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
+
+              <!-- Mobile <= 480px "Move to ->" Button Bar (Matches Image 2, disables dragging on mobile) -->
+              <button
+                type="button"
+                data-no-drag="true"
+                class="min-[481px]:hidden w-full py-2.5 px-4 bg-slate-100/95 hover:bg-slate-200/80 active:bg-slate-200 flex items-center justify-center gap-2 text-sm font-extrabold text-slate-700 transition cursor-pointer"
+                @click.stop="openMoveToModal(item)"
+              >
+                <span>Move to</span>
+                <ArrowRight class="w-4 h-4 stroke-[2.2]" />
+              </button>
             </div>
           </div>
         </div>
@@ -373,7 +388,8 @@
     <!-- VIEW 2: TABLE VIEW                                                      -->
     <!-- ======================================================================= -->
     <div v-else class="bg-white rounded-2xl border border-slate-100 shadow-card overflow-hidden">
-      <div class="overflow-x-auto">
+      <!-- Desktop / Tablet Table (> 480px) -->
+      <div class="hidden min-[481px]:block overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-slate-50/70 border-b border-slate-100 text-[11px] font-bold uppercase tracking-wider text-slate-400">
@@ -475,22 +491,191 @@
                 </span>
               </td>
 
-              <!-- 6. Aksi: Buka Detail (Edit & Delete ada di dalam Detail menu titik tiga ⋮) -->
+              <!-- 6. Aksi: Detail, Edit & Delete -->
               <td class="py-4 px-6 text-right whitespace-nowrap">
-                <button
-                  type="button"
-                  class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-extrabold bg-brand-50 text-brand-600 hover:bg-brand-600 hover:text-white transition"
-                  :title="t('Buka Detail (Edit & Delete)', 'Open Detail (Edit & Delete)')"
-                  @click="openDetailModal(item)"
-                >
-                  <Eye class="w-3.5 h-3.5" />
-                  <span>{{ t('Buka Detail', 'Open Detail') }}</span>
-                  <ArrowRight class="w-3.5 h-3.5" />
-                </button>
+                <div class="inline-flex items-center justify-end gap-2">
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-50 text-brand-600 hover:bg-brand-600 hover:text-white transition"
+                    @click="openDetailModal(item)"
+                  >
+                    <Eye class="w-3.5 h-3.5" />
+                    <span>{{ t('Detail', 'Details') }}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-50 text-amber-600 border border-amber-300 hover:bg-amber-500 hover:text-white hover:border-amber-500 transition"
+                    @click="openEditModal(item)"
+                  >
+                    <Pencil class="w-3.5 h-3.5" />
+                    <span>Edit</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white transition"
+                    @click="handleDelete(item)"
+                  >
+                    <Trash2 class="w-3.5 h-3.5" />
+                    <span>{{ t('Hapus', 'Delete') }}</span>
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Mobile Expandable Table (< 480px, Matches Image 1) -->
+      <div class="min-[481px]:hidden">
+        <div class="bg-slate-50/70 border-b border-slate-100 px-5 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+          {{ t('Pembuat & Departemen', 'Requester & Department') }} &darr;
+        </div>
+
+        <div v-if="loading" class="py-12 px-5 text-center text-slate-400 text-sm">
+          {{ t('Memuat data work order...', 'Loading work orders...') }}
+        </div>
+        <div v-else-if="tickets.length === 0" class="py-12 px-5 text-center text-slate-400 text-sm">
+          {{ t('Tidak ada data work order yang ditemukan.', 'No work orders found.') }}
+        </div>
+        <div v-else class="divide-y divide-slate-100">
+          <div v-for="item in tickets" :key="`mob-wo-${item.id}`">
+            <!-- Collapsed Row Bar -->
+            <div
+              class="px-5 py-4 flex items-center justify-between gap-3 cursor-pointer hover:bg-slate-50/60 transition select-none"
+              @click="toggleExpand(item.id)"
+            >
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 font-extrabold text-xs flex items-center justify-center shrink-0">
+                  {{ getInitials(item.requested_by) }}
+                </div>
+                <div class="min-w-0">
+                  <div class="font-bold text-slate-900 text-sm truncate">{{ item.requested_by }}</div>
+                  <div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                    <span class="text-xs font-semibold text-brand-600 truncate">
+                      {{ item.department_name || item.department }}
+                    </span>
+                    <span
+                      v-if="item.raw_department && item.raw_department.toLowerCase() !== (item.department_name || '').toLowerCase()"
+                      class="text-[10px] px-1.5 py-0.2 rounded bg-slate-100 text-slate-500 font-medium"
+                    >
+                      {{ item.raw_department }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-600 flex items-center justify-center shrink-0 transition"
+                :aria-label="isExpanded(item.id) ? 'Tutup detail baris' : 'Buka detail baris'"
+                @click.stop="toggleExpand(item.id)"
+              >
+                <Minus v-if="isExpanded(item.id)" class="w-4 h-4" />
+                <Plus v-else class="w-4 h-4" />
+              </button>
+            </div>
+
+            <!-- Expanded Detail Stack -->
+            <div
+              v-if="isExpanded(item.id)"
+              class="px-5 py-4 bg-white border-t border-slate-100 space-y-3.5 text-sm"
+            >
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                  {{ t('Tanggal & No. Tiket', 'Date & Ticket No.') }}
+                </span>
+                <div class="mt-1 font-bold text-slate-900 text-sm flex items-center gap-2 flex-wrap">
+                  <span>{{ item.date_requested_label || item.date_requested }}</span>
+                  <span class="text-brand-600 font-extrabold">#{{ item.work_order_no }}</span>
+                </div>
+              </div>
+
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                  Location Office
+                </span>
+                <div class="mt-1 font-bold text-slate-900 text-sm">
+                  {{ item.location || '-' }}
+                </div>
+              </div>
+
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                  {{ t('Deskripsi', 'Description') }}
+                </span>
+                <div class="mt-1 text-slate-800 text-sm leading-relaxed break-words">
+                  {{ item.description || '-' }}
+                </div>
+              </div>
+
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                  Status
+                </span>
+                <div class="mt-1.5">
+                  <span
+                    :class="[
+                      'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold',
+                      item.status === 'done'
+                        ? 'bg-emerald-100 text-emerald-700'
+                        : item.status === 'wo_issued'
+                          ? 'bg-rose-100 text-rose-700'
+                          : 'bg-amber-100 text-amber-700'
+                    ]"
+                  >
+                    <span
+                      :class="[
+                        'w-1.5 h-1.5 rounded-full',
+                        item.status === 'done'
+                          ? 'bg-emerald-500'
+                          : item.status === 'wo_issued'
+                            ? 'bg-rose-500'
+                            : 'bg-amber-500'
+                      ]"
+                    />
+                    {{ item.status_label || (item.status === 'done' ? 'Done' : item.status === 'wo_issued' ? 'WO has Been Issued' : 'Open') }}
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                  {{ t('Aksi', 'Action') }}
+                </span>
+                <div class="mt-1.5 flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-50 text-brand-600 hover:bg-brand-600 hover:text-white transition"
+                    @click.stop="openDetailModal(item)"
+                  >
+                    <Eye class="w-3.5 h-3.5" />
+                    <span>{{ t('Detail', 'Details') }}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-50 text-amber-600 border border-amber-300 hover:bg-amber-500 hover:text-white hover:border-amber-500 transition"
+                    @click.stop="openEditModal(item)"
+                  >
+                    <Pencil class="w-3.5 h-3.5" />
+                    <span>Edit</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white transition"
+                    @click.stop="handleDelete(item)"
+                  >
+                    <Trash2 class="w-3.5 h-3.5" />
+                    <span>{{ t('Hapus', 'Delete') }}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Bottom Bar: Pagination -->
@@ -1182,6 +1367,73 @@
     </Teleport>
 
     <!-- ======================================================================= -->
+    <!-- MODAL 4: MOBILE MOVE TO STATUS PICKER (Below 480px - Image 2)           -->
+    <!-- ======================================================================= -->
+    <Teleport to="body">
+      <div
+        v-if="moveModalOpen && movingTicket"
+        class="fixed inset-0 z-[65] flex items-end sm:items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs"
+        @click.self="moveModalOpen = false"
+      >
+        <div class="bg-white rounded-3xl shadow-modal border border-slate-100 w-full max-w-sm overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-4 bg-slate-50/70 border-b border-slate-100">
+            <div>
+              <h3 class="text-base font-extrabold text-slate-900">
+                {{ t('Pindahkan Tiket', 'Move Ticket') }} #{{ movingTicket.work_order_no }}
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">
+                {{ t('Pilih status tujuan pemindahan tiket:', 'Choose destination status for this ticket:') }}
+              </p>
+            </div>
+            <button
+              type="button"
+              class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center"
+              @click="moveModalOpen = false"
+            >
+              <X class="w-4 h-4" />
+            </button>
+          </div>
+
+          <div class="p-4 space-y-2.5">
+            <button
+              v-for="col in kanbanColumns"
+              :key="`move-opt-${col.status}`"
+              type="button"
+              :disabled="movingTicket.status === col.status"
+              :class="[
+                'w-full px-4 py-3.5 rounded-2xl border text-left flex items-center justify-between gap-3 transition',
+                movingTicket.status === col.status
+                  ? 'bg-slate-50 border-slate-200 text-slate-400 cursor-not-allowed'
+                  : 'bg-white border-slate-200/90 hover:border-brand-600 hover:bg-brand-50/40 text-slate-800 shadow-2xs cursor-pointer'
+              ]"
+              @click="selectMoveToStatus(col.status)"
+            >
+              <div class="flex items-center gap-3 min-w-0">
+                <span :class="['w-3 h-3 rounded-full shrink-0', col.dotClass]" />
+                <div class="min-w-0">
+                  <div class="text-sm font-extrabold truncate">
+                    {{ col.title }}
+                  </div>
+                  <div v-if="col.status === 'done' && movingTicket.solution" class="text-[11px] font-semibold text-emerald-600 truncate">
+                    {{ t('Solution sudah terisi, siap dipindah', 'Solution added, ready to move') }}
+                  </div>
+                </div>
+              </div>
+
+              <span
+                v-if="movingTicket.status === col.status"
+                class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-200/80 text-slate-600 shrink-0"
+              >
+                {{ t('Saat Ini', 'Current') }}
+              </span>
+              <ArrowRight v-else class="w-4 h-4 text-brand-600 shrink-0" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+
+    <!-- ======================================================================= -->
     <!-- RIGHT-SIDE DETAIL DRAWER (Matches Image 2 + Three-Dots Edit/Delete)     -->
     <!-- ======================================================================= -->
     <TicketDetailModal
@@ -1192,6 +1444,7 @@
       @edit="handleEditFromDetail"
       @delete="handleDeleteFromDetail"
       @change-status="handleStatusChangeFromDetail"
+      @updated="onTicketUpdatedFromDetail"
     />
   </div>
 </template>
@@ -1201,6 +1454,7 @@ import Swal from 'sweetalert2'
 import * as XLSX from 'xlsx'
 import {
   Plus,
+  Minus,
   FileSpreadsheet,
   Search,
   X,
@@ -1208,6 +1462,7 @@ import {
   CheckCircle2,
   Eye,
   Pencil,
+  Trash2,
   ClipboardPaste,
   Sparkles,
   AlertTriangle,
@@ -1268,7 +1523,45 @@ const addModalOpen = ref(false)
 const doneModalOpen = ref(false)
 const editModalOpen = ref(false)
 const detailModalOpen = ref(false)
+const moveModalOpen = ref(false)
+const movingTicket = ref<any | null>(null)
 const activeTicket = ref<any | null>(null)
+const expandedRows = ref<number[]>([])
+
+const isExpanded = (id: number) => expandedRows.value.includes(id)
+const toggleExpand = (id: number) => {
+  if (isExpanded(id)) {
+    expandedRows.value = expandedRows.value.filter((rowId) => rowId !== id)
+  } else {
+    expandedRows.value.push(id)
+  }
+}
+
+const openMoveToModal = (item: any) => {
+  movingTicket.value = item
+  moveModalOpen.value = true
+}
+
+const selectMoveToStatus = async (targetStatus: string) => {
+  const ticket = movingTicket.value
+  moveModalOpen.value = false
+  movingTicket.value = null
+  if (!ticket || ticket.status === targetStatus) return
+  await handleStatusTransition(ticket, targetStatus)
+}
+
+const onTicketUpdatedFromDetail = (updatedTicket: any) => {
+  if (updatedTicket) {
+    const idx = tickets.value.findIndex((i) => i.id === updatedTicket.id)
+    if (idx !== -1) {
+      tickets.value[idx] = updatedTicket
+    }
+    if (activeTicket.value?.id === updatedTicket.id) {
+      activeTicket.value = updatedTicket
+    }
+  }
+  fetchWorkOrders(meta.value.current_page)
+}
 
 // Kanban Columns grouped by status
 const kanbanColumns = computed(() => {
@@ -1546,6 +1839,10 @@ const findKanbanColumnAtPoint = (clientX: number, clientY: number): string | nul
 }
 
 const onCardPointerDown = (event: PointerEvent, item: any) => {
+  // Below 480px cards cannot be dragged; user must click the "Move to" button
+  if (import.meta.client && window.innerWidth <= 480) {
+    return
+  }
   // Ignore right-clicks or clicks on buttons/interactive elements
   if (event.button !== 0 && event.pointerType === 'mouse') return
   const targetEl = event.target as HTMLElement | null
@@ -1667,8 +1964,47 @@ const isTicketPastDeadline = (ticket: any): boolean => {
 const handleStatusTransition = async (ticket: any, targetStatus: string) => {
   if (!ticket || ticket.status === targetStatus) return
 
-  // RULE 1: Moving TO 'done' requires entering Solution Case and Working Time
+  // RULE 1: Moving TO 'done'
+  // If solution has already been added (e.g. from Detail Solution Case), move directly to Done!
+  // Otherwise open the Done modal to fill working time and solution case.
   if (targetStatus === 'done') {
+    if (ticket.solution && String(ticket.solution).trim() !== '') {
+      try {
+        const defaultDuration =
+          ticket.duration ||
+          buildDurationFromTime({ startHour: '09', startMinute: '00', endHour: '10', endMinute: '00' }, ticket.completed_date || getTodayLocalDate())
+        const res = await apiFetch<{ message: string; data: any }>(`/admin/work-orders/${ticket.id}/done`, {
+          method: 'POST',
+          body: {
+            completed_date: ticket.completed_date || getTodayLocalDate(),
+            duration: defaultDuration,
+            solution: String(ticket.solution).trim(),
+          },
+        })
+        if (res.data) {
+          const idx = tickets.value.findIndex((i) => i.id === ticket.id)
+          if (idx !== -1) tickets.value[idx] = res.data
+          if (activeTicket.value?.id === ticket.id) activeTicket.value = res.data
+        }
+        await fetchWorkOrders(meta.value.current_page)
+        await Swal.fire({
+          icon: 'success',
+          title: t('Tiket Selesai (Done)', 'Ticket Completed (Done)'),
+          text: res.message,
+          confirmButtonColor: '#042B4F',
+          timer: 1800,
+        })
+      } catch (err: any) {
+        await Swal.fire({
+          icon: 'error',
+          title: t('Gagal Memindahkan ke Done', 'Failed to Move to Done'),
+          text: err?.data?.message || t('Terjadi kesalahan saat memindahkan status tiket.', 'An error occurred while moving ticket to Done.'),
+          confirmButtonColor: '#042B4F',
+        })
+      }
+      return
+    }
+
     openDoneModal(ticket)
     return
   }

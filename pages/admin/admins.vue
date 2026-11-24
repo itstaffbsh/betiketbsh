@@ -49,8 +49,8 @@
         </div>
       </div>
 
-      <!-- TABLE -->
-      <div class="overflow-x-auto">
+      <!-- TABLE (Desktop / Tablet > 480px) -->
+      <div class="hidden min-[481px]:block overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-slate-50/70 border-b border-slate-100 text-[11px] font-bold uppercase tracking-wider text-slate-400">
@@ -112,7 +112,7 @@
                 <div class="inline-flex items-center justify-end gap-2">
                   <button
                     type="button"
-                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-50 text-amber-600 border border-amber-300 hover:bg-amber-500 hover:text-white hover:border-amber-500 transition"
                     @click="openModal(adm)"
                   >
                     <Pencil class="w-3.5 h-3.5" />
@@ -143,6 +143,111 @@
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Mobile Expandable Table (< 480px, Matches Image 1) -->
+      <div class="min-[481px]:hidden">
+        <div class="bg-slate-50/70 border-b border-slate-100 px-5 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+          {{ t('Nama & Jabatan', 'Name & Position') }} &darr;
+        </div>
+
+        <div v-if="loading" class="py-12 px-5 text-center text-slate-400 text-sm">
+          {{ t('Memuat data admin...', 'Loading admins...') }}
+        </div>
+        <div v-else-if="admins.length === 0" class="py-12 px-5 text-center text-slate-400 text-sm">
+          {{ t('Tidak ada data admin yang ditemukan.', 'No admins found.') }}
+        </div>
+        <div v-else class="divide-y divide-slate-100">
+          <div v-for="adm in admins" :key="`mob-adm-${adm.id}`">
+            <!-- Collapsed Row Bar -->
+            <div
+              class="px-5 py-4 flex items-center justify-between gap-3 cursor-pointer hover:bg-slate-50/60 transition select-none"
+              @click="toggleExpand(adm.id)"
+            >
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-9 h-9 rounded-xl bg-brand-600 text-white font-extrabold text-xs flex items-center justify-center shrink-0">
+                  {{ getInitials(adm.name) }}
+                </div>
+                <div class="min-w-0">
+                  <div class="font-bold text-slate-900 text-sm truncate">{{ adm.name }}</div>
+                  <div class="text-xs font-semibold text-brand-600 mt-0.5 truncate">
+                    {{ adm.position }}
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-600 flex items-center justify-center shrink-0 transition"
+                :aria-label="isExpanded(adm.id) ? 'Tutup detail baris' : 'Buka detail baris'"
+                @click.stop="toggleExpand(adm.id)"
+              >
+                <Minus v-if="isExpanded(adm.id)" class="w-4 h-4" />
+                <Plus v-else class="w-4 h-4" />
+              </button>
+            </div>
+
+            <!-- Expanded Detail Stack -->
+            <div
+              v-if="isExpanded(adm.id)"
+              class="px-5 py-4 bg-white border-t border-slate-100 space-y-3.5 text-sm"
+            >
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                  Email
+                </span>
+                <div class="mt-1 font-bold text-slate-900 text-sm break-all">
+                  {{ adm.email || '-' }}
+                </div>
+              </div>
+
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                  {{ t('Nomor HP', 'Phone Number') }}
+                </span>
+                <div class="mt-1 font-bold text-slate-900 text-sm">
+                  {{ adm.phone || '-' }}
+                </div>
+              </div>
+
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                  {{ t('Aksi', 'Action') }}
+                </span>
+                <div class="mt-1.5 flex items-center gap-2">
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-50 text-amber-600 border border-amber-300 hover:bg-amber-500 hover:text-white hover:border-amber-500 transition"
+                    @click.stop="openModal(adm)"
+                  >
+                    <Pencil class="w-3.5 h-3.5" />
+                    <span>Edit</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    :disabled="adm.id === currentUser?.id"
+                    :title="
+                      adm.id === currentUser?.id
+                        ? t('Admin yang sedang login tidak dapat menghapus akunnya sendiri', 'Logged-in admin cannot delete their own account')
+                        : t('Hapus Admin', 'Delete Admin')
+                    "
+                    :class="[
+                      'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition',
+                      adm.id === currentUser?.id
+                        ? 'bg-slate-100 text-slate-400 cursor-not-allowed opacity-60'
+                        : 'bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white'
+                    ]"
+                    @click.stop="handleDelete(adm)"
+                  >
+                    <Trash2 class="w-3.5 h-3.5" />
+                    <span>{{ t('Hapus', 'Delete') }}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Bottom Bar -->
@@ -297,7 +402,7 @@
 
 <script setup lang="ts">
 import Swal from 'sweetalert2'
-import { Plus, Search, X, Users, Mail, Phone, Pencil, Trash2, Check, Eye, EyeOff } from 'lucide-vue-next'
+import { Plus, Minus, Search, X, Users, Mail, Phone, Pencil, Trash2, Check, Eye, EyeOff } from 'lucide-vue-next'
 
 definePageMeta({
   layout: 'admin',
@@ -324,6 +429,16 @@ const modalOpen = ref(false)
 const editingId = ref<number | null>(null)
 const saving = ref(false)
 const showPassword = ref(false)
+const expandedRows = ref<number[]>([])
+
+const isExpanded = (id: number) => expandedRows.value.includes(id)
+const toggleExpand = (id: number) => {
+  if (isExpanded(id)) {
+    expandedRows.value = expandedRows.value.filter((rowId) => rowId !== id)
+  } else {
+    expandedRows.value.push(id)
+  }
+}
 
 const form = reactive({
   name: '',

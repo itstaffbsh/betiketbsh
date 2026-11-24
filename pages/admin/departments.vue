@@ -49,8 +49,8 @@
         </div>
       </div>
 
-      <!-- TABLE -->
-      <div class="overflow-x-auto">
+      <!-- TABLE (Desktop / Tablet > 480px) -->
+      <div class="hidden min-[481px]:block overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-slate-50/70 border-b border-slate-100 text-[11px] font-bold uppercase tracking-wider text-slate-400">
@@ -120,7 +120,7 @@
                 <div class="inline-flex items-center justify-end gap-2">
                   <button
                     type="button"
-                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-50 text-amber-600 border border-amber-300 hover:bg-amber-500 hover:text-white hover:border-amber-500 transition"
                     @click="openModal(dept)"
                   >
                     <Pencil class="w-3.5 h-3.5" />
@@ -139,6 +139,111 @@
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Mobile Expandable Table (< 480px, Matches Image 1) -->
+      <div class="min-[481px]:hidden">
+        <div class="bg-slate-50/70 border-b border-slate-100 px-5 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+          {{ t('Nama Department', 'Department Name') }} &darr;
+        </div>
+
+        <div v-if="loading" class="py-12 px-5 text-center text-slate-400 text-sm">
+          {{ t('Memuat data departemen...', 'Loading departments...') }}
+        </div>
+        <div v-else-if="departments.length === 0" class="py-12 px-5 text-center text-slate-400 text-sm">
+          {{ t('Tidak ada data departemen yang ditemukan.', 'No departments found.') }}
+        </div>
+        <div v-else class="divide-y divide-slate-100">
+          <div v-for="dept in departments" :key="`mob-dept-${dept.id}`">
+            <!-- Collapsed Row Bar -->
+            <div
+              class="px-5 py-4 flex items-center justify-between gap-3 cursor-pointer hover:bg-slate-50/60 transition select-none"
+              @click="toggleExpand(dept.id)"
+            >
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                  <Building2 class="w-4 h-4" />
+                </div>
+                <div class="min-w-0">
+                  <div class="font-bold text-slate-900 text-sm truncate">{{ dept.name }}</div>
+                  <div class="text-[11px] text-slate-400">Soft Delete Protected</div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-600 flex items-center justify-center shrink-0 transition"
+                :aria-label="isExpanded(dept.id) ? 'Tutup detail baris' : 'Buka detail baris'"
+                @click.stop="toggleExpand(dept.id)"
+              >
+                <Minus v-if="isExpanded(dept.id)" class="w-4 h-4" />
+                <Plus v-else class="w-4 h-4" />
+              </button>
+            </div>
+
+            <!-- Expanded Detail Stack -->
+            <div
+              v-if="isExpanded(dept.id)"
+              class="px-5 py-4 bg-white border-t border-slate-100 space-y-3.5 text-sm"
+            >
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                  {{ t('Sub Department (Kata Kunci Auto-Mapping)', 'Sub Department (Auto-Mapping Keywords)') }}
+                </span>
+                <div class="mt-1.5 flex flex-wrap gap-1.5">
+                  <span
+                    v-for="(sub, idx) in dept.sub_departments"
+                    :key="idx"
+                    class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-50 text-brand-700 border border-brand-100"
+                  >
+                    {{ sub }}
+                  </span>
+                  <span
+                    v-if="!dept.sub_departments || dept.sub_departments.length === 0"
+                    class="text-xs text-slate-400 italic"
+                  >
+                    {{ t('Belum ada sub-department', 'No sub-departments yet') }}
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                  {{ t('Total Tiket', 'Total Tickets') }}
+                </span>
+                <div class="mt-1.5">
+                  <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700">
+                    {{ dept.work_orders_count || 0 }} {{ t('tiket', 'tickets') }}
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                  {{ t('Aksi', 'Action') }}
+                </span>
+                <div class="mt-1.5 flex items-center gap-2">
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-50 text-amber-600 border border-amber-300 hover:bg-amber-500 hover:text-white hover:border-amber-500 transition"
+                    @click.stop="openModal(dept)"
+                  >
+                    <Pencil class="w-3.5 h-3.5" />
+                    <span>Edit</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white transition"
+                    @click.stop="handleDelete(dept)"
+                  >
+                    <Trash2 class="w-3.5 h-3.5" />
+                    <span>{{ t('Hapus', 'Delete') }}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Bottom Bar -->
@@ -249,7 +354,7 @@
 
 <script setup lang="ts">
 import Swal from 'sweetalert2'
-import { Plus, Search, X, Building2, Pencil, Trash2, Check } from 'lucide-vue-next'
+import { Plus, Minus, Search, X, Building2, Pencil, Trash2, Check } from 'lucide-vue-next'
 
 definePageMeta({
   layout: 'admin',
@@ -275,6 +380,16 @@ const loading = ref(false)
 const modalOpen = ref(false)
 const editingId = ref<number | null>(null)
 const saving = ref(false)
+const expandedRows = ref<number[]>([])
+
+const isExpanded = (id: number) => expandedRows.value.includes(id)
+const toggleExpand = (id: number) => {
+  if (isExpanded(id)) {
+    expandedRows.value = expandedRows.value.filter((rowId) => rowId !== id)
+  } else {
+    expandedRows.value.push(id)
+  }
+}
 
 const form = reactive({
   name: '',

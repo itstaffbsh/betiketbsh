@@ -108,8 +108,8 @@
           </div>
         </div>
 
-        <!-- Table Content -->
-        <div class="overflow-x-auto">
+        <!-- Table Content (Desktop / Tablet > 480px) -->
+        <div class="hidden min-[481px]:block overflow-x-auto">
           <table class="w-full text-left border-collapse">
             <thead>
               <tr class="bg-slate-50/70 border-b border-slate-100 text-[11px] font-bold uppercase tracking-wider text-slate-400">
@@ -219,6 +219,131 @@
           </table>
         </div>
 
+        <!-- Mobile Expandable Table (< 480px, Matches Image 1) -->
+        <div class="min-[481px]:hidden">
+          <div class="bg-slate-50/70 border-b border-slate-100 px-5 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+            {{ t('Pembuat & Departemen', 'Requester & Department') }} &darr;
+          </div>
+
+          <div v-if="loading" class="py-12 px-5 text-center text-slate-400 text-sm">
+            {{ t('Memuat data tiket...', 'Loading tickets...') }}
+          </div>
+          <div v-else-if="tickets.length === 0" class="py-12 px-5 text-center text-slate-400 text-sm">
+            {{ t('Tidak ada data tiket yang sesuai dengan pencarian Anda.', 'No tickets matched your search.') }}
+          </div>
+          <div v-else class="divide-y divide-slate-100">
+            <div v-for="item in tickets" :key="`mob-${item.id}`">
+              <!-- Collapsed Row Bar -->
+              <div
+                class="px-5 py-4 flex items-center justify-between gap-3 cursor-pointer hover:bg-slate-50/60 transition select-none"
+                @click="toggleExpand(item.id)"
+              >
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 font-extrabold text-xs flex items-center justify-center shrink-0">
+                    {{ getInitials(item.requested_by) }}
+                  </div>
+                  <div class="min-w-0">
+                    <div class="font-bold text-slate-900 text-sm truncate">{{ item.requested_by }}</div>
+                    <div class="text-xs font-semibold text-brand-600 mt-0.5 truncate">
+                      {{ item.department_name || item.department }}
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-600 flex items-center justify-center shrink-0 transition"
+                  :aria-label="isExpanded(item.id) ? 'Tutup detail baris' : 'Buka detail baris'"
+                  @click.stop="toggleExpand(item.id)"
+                >
+                  <Minus v-if="isExpanded(item.id)" class="w-4 h-4" />
+                  <Plus v-else class="w-4 h-4" />
+                </button>
+              </div>
+
+              <!-- Expanded Detail Stack -->
+              <div
+                v-if="isExpanded(item.id)"
+                class="px-5 py-4 bg-white border-t border-slate-100 space-y-3.5 text-sm"
+              >
+                <div>
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                    {{ t('Tanggal & No. Tiket', 'Date & Ticket No.') }}
+                  </span>
+                  <div class="mt-1 font-bold text-slate-900 text-sm flex items-center gap-2 flex-wrap">
+                    <span>{{ item.date_requested_label || item.date_requested }}</span>
+                    <span class="text-brand-600 font-extrabold">#{{ item.work_order_no }}</span>
+                  </div>
+                </div>
+
+                <div>
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Location Office
+                  </span>
+                  <div class="mt-1 font-bold text-slate-900 text-sm">
+                    {{ item.location || '-' }}
+                  </div>
+                </div>
+
+                <div>
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                    {{ t('Deskripsi', 'Description') }}
+                  </span>
+                  <div class="mt-1 text-slate-800 text-sm leading-relaxed break-words">
+                    {{ item.description || '-' }}
+                  </div>
+                </div>
+
+                <div>
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Status
+                  </span>
+                  <div class="mt-1.5">
+                    <span
+                      :class="[
+                        'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold',
+                        item.status === 'done'
+                          ? 'bg-emerald-100 text-emerald-700'
+                          : item.status === 'wo_issued'
+                            ? 'bg-rose-100 text-rose-700'
+                            : 'bg-amber-100 text-amber-700'
+                      ]"
+                    >
+                      <span
+                        :class="[
+                          'w-1.5 h-1.5 rounded-full',
+                          item.status === 'done'
+                            ? 'bg-emerald-500'
+                            : item.status === 'wo_issued'
+                              ? 'bg-rose-500'
+                              : 'bg-amber-500'
+                        ]"
+                      />
+                      {{ item.status_label || (item.status === 'done' ? 'Done' : item.status === 'wo_issued' ? 'WO has Been Issued' : 'Open') }}
+                    </span>
+                  </div>
+                </div>
+
+                <div>
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                    {{ t('Aksi', 'Action') }}
+                  </span>
+                  <div class="mt-1.5">
+                    <button
+                      type="button"
+                      class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-brand-50 text-brand-600 hover:bg-brand-600 hover:text-white transition"
+                      @click.stop="openDetail(item)"
+                    >
+                      <Eye class="w-3.5 h-3.5" />
+                      {{ t('Detail', 'Details') }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Bottom Bar -->
         <PaginationBar :meta="meta" @change="changePage" @update:per-page="changePerPage" />
       </div>
@@ -238,6 +363,8 @@ import {
   X,
   MapPin,
   Eye,
+  Plus,
+  Minus,
 } from 'lucide-vue-next'
 
 const { apiFetch, isAuthenticated } = useAuth()
@@ -265,6 +392,16 @@ const perPage = ref(10)
 const loading = ref(false)
 const detailOpen = ref(false)
 const selectedTicket = ref<any | null>(null)
+const expandedRows = ref<number[]>([])
+
+const isExpanded = (id: number) => expandedRows.value.includes(id)
+const toggleExpand = (id: number) => {
+  if (isExpanded(id)) {
+    expandedRows.value = expandedRows.value.filter((rowId) => rowId !== id)
+  } else {
+    expandedRows.value.push(id)
+  }
+}
 
 let searchTimer: ReturnType<typeof setTimeout> | null = null
 

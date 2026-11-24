@@ -1,0 +1,1 @@
+import{P as i,y as u}from"./BMyqecLN.js";import{u as o}from"./oWFbt-QB.js";const r=i(t=>{const{initAuth:a,isAuthenticated:e}=o();if(a(),t.path.startsWith("/admin")&&!e.value)return u("/login")});export{r as default};
